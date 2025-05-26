@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playground — Complete Intro to Vue 3</title>
+</head>
+<body>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp } = Vue
+
+    const app = createApp({
+      data() {
+        return {
+          x: 7,
+          newCharacter: "",
+          count: 10,
+          counterTitle: 'Counter Standard',
+          incrementAmount: 8,
+          message: 'Hello it works',
+          listOfCharacters: [
+            {
+              name: "Ang",
+              isFavorite: true
+            },
+            {
+              name: "Bob",
+              isFavorite: false
+            },
+            {
+              name: "Sally",
+              isFavorite: false
+            }
+          ]
+        }
+      },
+      computed: {
+        displayTitle() {
+          if (this.count > 20) {
+            return 'Counter Standard - Very Long'
+          } else {
+            return 'Counter Standard'
+          }
+        }
+      },
+      methods: {
+        incrementCount() {
+          this.count += this.incrementAmount
+        },
+        toggleFavorite(item, event) {
+          console.log(item)
+          item.isFavorite = !item.isFavorite
+        },
+        addCharacter(character) {
+          const newChar = { name: character, isFavorite: false }
+          this.listOfCharacters.push(newChar) 
+          console.log(this.listOfCharacters)
+        },
+      },
+      watch: {
+        count(newValue) {
+          console.log(newValue)
+          if (newValue > 20) {
+            this.counterTitle += ' Very Long'
+          }
+        }
+      }
+    })
+
+    app.mount('#app')
+  </script>
+</body>
+
+</html>
