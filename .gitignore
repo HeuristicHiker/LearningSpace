@@ -1,2 +1,3 @@
 go-lang/beginner_go/proj/database
 go-lang/beginner_go/proj/.database
+**/node_modules
