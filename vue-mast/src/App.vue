@@ -1,53 +1,31 @@
 <script>
-import Counter from "./components/base-counter.vue";
-import Characters from "./components/BaseCharacters.vue";
-import BenderStatistics from "./components/BenderStatistics.vue";
-import BaseButton from "./components/base-button.vue";
-import BaseLayout from "./components/layout.vue";
+// Useful link
+// Lifecycle hooks
+// https://vuejs.org/guide/essentials/lifecycle.html
+
+
 export default {
-  data() {
-    return {
-      message: "Hello it works",
-      characterList: [
-        {
-          name: "Ang",
-          isFavorite: true,
-          element: ["Fire", "Water"],
-        },
-        {
-          name: "Bob",
-          isFavorite: false,
-          element: ["Fire"],
-        },
-        {
-          name: "Sally",
-          isFavorite: false,
-          element: ["Water"],
-        },
-      ],
-    };
+  data: () => ({
+    pokedex: [1,2,3],
+  }),
+  methods: {
+    async fetchPokemon() {
+      this.pokedex = await fetch('https://pokeapi.co/api/v2/pokemon/ditto').then(response => response.json())
+    }
   },
-  components: {
-    BenderStatistics,
-    BaseButton,
-    BaseLayout,
-    Counter,
-    Characters,
-  },
-};
+  created() {
+    this.fetchPokemon()
+    console.log("Create")
+    console.log(this.pokedex)
+  }
+}
 </script>
 
 <template>
-  <div id="app">
-    <BaseLayout>
-      <template #one>
-        <Counter />
-      </template>
-      <template #two>
-        <Characters />
-        <BaseButton left> </BaseButton>
-        <BenderStatistics :characters="characterList" />
-      </template>
-    </BaseLayout>
-  </div>
+<h1>New App</h1>
+<pre>{{  pokedex }}</pre>
+<button @click="fetchPokemon">Fetch Pokemon</button>
 </template>
+
+<style>
+</style>
