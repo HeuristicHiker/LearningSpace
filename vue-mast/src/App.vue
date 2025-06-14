@@ -6,7 +6,7 @@
 
 export default {
   data: () => ({
-    pokedex: [1,2,3],
+    pokedex: [1,2,3], 
   }),
   methods: {
     async fetchPokemon() {
@@ -22,10 +22,10 @@ export default {
 </script>
 
 <template>
-<h1>New App</h1>
+<h1>New App</h1>”‹⁄
 <pre>{{  pokedex }}</pre>
 <button @click="fetchPokemon">Fetch Pokemon</button>
-</template>
+</template> 
 
 <style>
-</style>
+</style> 
