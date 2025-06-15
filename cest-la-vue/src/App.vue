@@ -1,24 +1,50 @@
-<script></script>
+<script>
+import HomePage from "./components/HomePage.vue";
+import LoginPage from "./components/LoginPage.vue";
+import UserPage from "./components/UserPage.vue";
 
-<template>
+export default {
+  components: {
+    HomePage,
+    LoginPage,
+    UserPage,
+  },
+  data: () => ({
+    currentPage: "User", 
+  }),
+  computed: {
+    renderPage() {
+      return this.currentPage + "Page" 
+    }
+  },
+  methods: {
+    showHomePage() {
+      this.currentPage = "Home";
+    },
+    showLoginPage() {
+      this.currentPage = "Login";
+    },
+    showUsersPage() {
+      this.currentPage = "User";
+    }
+  },
+};
+</script>
+
+<template> 
   <header class="header">
     <span class="logo">
       <img src="@/assets/vue-heart.png" width="30" />C'est La Vue
     </span>
     <nav class="nav">
-      <router-link to="/">Home</router-link>
-      <router-link to="/login">Login</router-link>
-      <router-link to="/user">User</router-link>
+      <a href="#" @click.prevent="showHomePage">Home</a>
+      <a href="#" @click.prevent="showLoginPage">Login</a>
+      <a href="#" @click.prevent="showUserPage">User</a>
     </nav>
   </header>
-
-  <p>This is a new message!</p>
-
-  <Suspense>
-    <router-view />
-
-    <template v-slot:fallback> Data is loading... </template>
-  </Suspense>
+  <component :is="renderPage" />
+  <!-- <HomePage v-if="currentPage === 'Home'" /> -->
+  <!-- <LoginPage v-else /> -->
 </template>
 
 <style>
@@ -59,35 +85,5 @@ span.logo img {
 
 .nav a:last-child {
   padding-right: 0;
-}
-
-main {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  max-width: 320px;
-  margin: 0 auto;
-}
-
-main h1 {
-  margin-top: 10vh;
-  margin-bottom: 20px;
-}
-
-label {
-  margin-bottom: 5px;
-}
-
-input[type="email"] {
-  padding: 0.5rem;
-  margin-bottom: 30px;
-}
-
-button {
-  border: 1px solid green;
-  padding: 10px;
-  color: green;
-  background-color: rgb(213, 255, 213);
-  cursor: pointer;
 }
 </style>
