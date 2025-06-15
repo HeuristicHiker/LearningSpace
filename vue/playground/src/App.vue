@@ -5,6 +5,9 @@
 
 
 export default {
+  setup() {
+    const regionName = "kanto";
+  },
   data: () => ({
     pokedex: [1,2,3], 
   }),
