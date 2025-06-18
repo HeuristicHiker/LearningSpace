@@ -1,18 +1,31 @@
 <script>
 
+import { computed, ref, reactive } from "vue"
+
 export default {
-  data: () => ({
-    users: [], 
-  }),
-  methods: {
-    async fetchUsers() {
-      this.users = await fetch("https://jsonplaceholder.typicode.com/todos").then(response => response.json())
+  async setup() {
+    const todos =  await fetch("https://jsonplaceholder.typicode.com/todos").then(response => response.json())
+    const status = ref("ready")
+    
+    const capitalStatus = computed(() => {
+      return status.value.toUpperCase()
+    })
+
+    return {
+      todos,
+      status,
+      capitalStatus
     }
   },
-  created() {
-    this.fetchUsers()
-    console.log("Create")
-    console.log(this.users)
+  methods: {
+    changeStatus(){
+      if(this.status == "ready") {
+        this.status = "Not ready"
+      }
+      else {
+        this.status = "ready"
+      }
+    }
   }
 }
 
@@ -21,16 +34,17 @@ export default {
 <template>
   <main>
     <h1>Welcome to <br />C'est La Vue</h1>
+    <h2>{{ status }}</h2>
+    <h2>{{ capitalStatus }}</h2>
+    <button @click="changeStatus"></button>
     <p>
       This is a place to manage various things: todos, users, posts, etc.
       Whatever your mind desires!
     </p>
     <ul>
-      <li v-for="user in users" :key="`user-${user.id}`" >{{  user.title }}: {{ user.completed }}</li>
+      <li v-for="todo in todos" :key="`user-${todo.id}`" >{{  todo.title }}: {{ todo.completed }}</li>
     </ul>
-
     <pre>{{  users }}</pre>
-    <button @click="fetchUsers">Fetch Users</button>
   </main>
 </template>
 
@@ -66,5 +80,3 @@ button {
 }
 </style>
 
-
-      <!-- this.users = await fetch('https://jsonplaceholder.typicode.com/todos').then(response => response.json()) -->

@@ -1,34 +1,20 @@
 <script>
-// Useful link
-// Lifecycle hooks
-// https://vuejs.org/guide/essentials/lifecycle.html
-
+import Pokedex from './components/pokedex.vue';
 
 export default {
-  setup() {
-    const regionName = "kanto";
-  },
-  data: () => ({
-    pokedex: [1,2,3], 
-  }),
-  methods: {
-    async fetchPokemon() {
-      this.pokedex = await fetch('https://pokeapi.co/api/v2/pokemon/ditto').then(response => response.json())
-    }
-  },
-  created() {
-    this.fetchPokemon()
-    console.log("Create")
-    console.log(this.pokedex)
+  components: {
+    Pokedex,
   }
 }
+
 </script>
 
 <template>
-<h1>New App</h1>”‹⁄
-<pre>{{  pokedex }}</pre>
-<button @click="fetchPokemon">Fetch Pokemon</button>
+  <h1>New App</h1>
+  <Suspense>
+    <Pokedex />
+    <template v-slot:fallback >
+        Loading
+    </template>
+  </Suspense>
 </template> 
-
-<style>
-</style> 
