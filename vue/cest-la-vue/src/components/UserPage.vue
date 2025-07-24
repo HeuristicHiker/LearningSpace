@@ -1,32 +1,31 @@
 <script>
-
 import { computed, ref, reactive } from "vue"
+import UserCard from "./UserCard.vue"
 
 export default {
+  components: {
+    UserCard
+  },
   async setup() {
-    const todos =  await fetch("https://jsonplaceholder.typicode.com/todos").then(response => response.json())
-    const status = ref("ready")
-    
-    const capitalStatus = computed(() => {
-      return status.value.toUpperCase()
+    const users = reactive({
+      usersList: [],
     })
 
+    async function fetchUsers(){
+      const response = await fetch("https://jsonplaceholder.typicode.com/users").then(response => response.json())
+      return response
+    }
+    
+    state.userList = await fetchUsers()
+
     return {
-      todos,
-      status,
-      capitalStatus
+      state,
+      fetchUsers,
     }
   },
-  methods: {
-    changeStatus(){
-      if(this.status == "ready") {
-        this.status = "Not ready"
-      }
-      else {
-        this.status = "ready"
-      }
-    }
-  }
+  created() {
+    users,
+  },
 }
 
 </script>
@@ -42,9 +41,12 @@ export default {
       Whatever your mind desires!
     </p>
     <ul>
-      <li v-for="todo in todos" :key="`user-${todo.id}`" >{{  todo.title }}: {{ todo.completed }}</li>
+      <UserCard
+        v-for="user in state.userList"
+        :user="user"
+        :key="`user-${user.id}`"
+      />
     </ul>
-    <pre>{{  users }}</pre>
   </main>
 </template>
 
