@@ -1,18 +1,44 @@
-import { useState, useEffect } from "react";
-import Pizza from "./Pizza";
-import Cart from './Cart'
+// at top
+import { createLazyFileRoute } from "@tanstack/react-router";
+import { useState, useContext, useEffect } from "react";
+
+// make sure you modified the relative paths here – VS Code may have done this for you already
+import { CartContext } from "../contexts";
+import Cart from "../Cart";
+import Pizza from "../Pizza";
+
+export const Route = createLazyFileRoute("/order")({
+  component: Order,
+});
 
 const intl = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
 });
 
-export default function Order() {
+
+function Order() {
   const [pizzaTypes, setPizzaTypes] = useState([]);
   const [pizzaType, setPizzaType] = useState("pepperoni");
   const [pizzaSize, setPizzaSize] = useState("M");
-  const [cart, setCart] = useState([])
+  const [cart, setCart] = useContext(CartContext)
   const [loading, setLoading] = useState(true);
+
+  async function checkout(){
+    setLoading(true)
+
+    await fetch("/api/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({cart})
+    })
+
+    setCart([])
+    setLoading(false)
+
+  }
 
   let price, selectedPizza;
   if (!loading) {
@@ -31,9 +57,8 @@ export default function Order() {
     fetchPizzaTypes();
   }, []);
 
-  console.log(selectedPizza);
-
   return (
+    <div className="order-page">
     <div className="order">
       <h2>Create Order</h2>
       <form onSubmit={(e) => {
@@ -106,8 +131,9 @@ export default function Order() {
           </div>
         )}
       </form>
+      </div>
       {
-        loading ? <h2>Loading...</h2> : <Cart cart={cart} />
+        loading ? <h2>Loading...</h2> : <Cart cart={cart} checkout={checkout} />
       }
     </div>
   );
