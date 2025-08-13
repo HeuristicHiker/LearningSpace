@@ -46,6 +46,10 @@ function Order() {
     price = intl.format(selectedPizza.sizes[pizzaSize]);
   }
 
+  function addToCart() {
+    setCart([...cart, {pizza: selectedPizza, size: pizzaSize, price}])
+  }
+
   async function fetchPizzaTypes() {
     const pizzaRes = await fetch("/api/pizzas");
     const pizzaJson = await pizzaRes.json();
@@ -61,10 +65,7 @@ function Order() {
     <div className="order-page">
     <div className="order">
       <h2>Create Order</h2>
-      <form onSubmit={(e) => {
-        e.preventDefault()
-        setCart([...cart, {pizza: selectedPizza, size: pizzaSize, price}])
-      }}>
+      <form action={addToCart}>
         <div>
           <div>
             <label htmlFor="pizza-type">Pizza Type</label>

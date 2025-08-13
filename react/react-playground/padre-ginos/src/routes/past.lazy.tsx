@@ -1,26 +1,37 @@
+import React, { useState, Suspense, use} from 'react'
 import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import getPastOrders from '../api/getPastOrders'
 import getPastOrder from '../api/getPastOrder'
+import ErrorBoundary from '../ErrorBoundary'
 
 import Modal from "../Modal"
 import { priceConverter } from '../useCurrency'
 
 
 
-export const Route = createLazyFileRoute('/past')({
-    component: PastOrdersRoute
+export const Route = createLazyFileRoute("/past")({
+    component: ErrorBoundaryWrappedPastOrderRoutes
 })
 
-function PastOrdersRoute() {
+function ErrorBoundaryWrappedPastOrderRoutes(props) {
     const [page, setPage] = useState(1)
-    const [focusedOrder, setFocusedOrder] = useState()
-    const { isLoading, data } = useQuery({
+    // TODO - re-look at syntax
+    const loadPromise = useQuery({
         queryKey: ['past-orders', page],
         queryFn: () => getPastOrders(page),
         staleTime: 30000
-    })
+    }).promise
+    return (
+        <ErrorBoundary>
+            <PastOrdersRoute {...props} />
+        </ErrorBoundary>
+    )
+}
+
+function PastOrdersRoute() {
+    const [focusedOrder, setFocusedOrder] = useState()
 
     const { isLoading: isLoadingPastOrder, data: pastOrderData } = useQuery({
         queryKey: ["past-orders", focusedOrder],
